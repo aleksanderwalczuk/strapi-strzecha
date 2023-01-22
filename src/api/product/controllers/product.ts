@@ -30,7 +30,6 @@ export default factories.createCoreController('api::product.product', ({ strapi 
 
       // @ts-ignore
       const [result] = entity.results as unknown[];
-      console.log("RES", result);
 
       // @ts-ignore
       ctx.assert.equal(id, result.uid, 404, `Id ${id} not found`);
