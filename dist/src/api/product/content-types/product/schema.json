@@ -1,0 +1,62 @@
+{
+    "kind": "collectionType",
+    "collectionName": "products",
+    "info": {
+        "singularName": "product",
+        "pluralName": "products",
+        "displayName": "Product",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true,
+            "minLength": 1
+        },
+        "uid": {
+            "type": "uid",
+            "targetField": "title",
+            "required": true,
+            "minLength": 3
+        },
+        "images": {
+            "type": "media",
+            "multiple": true,
+            "required": false,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "price": {
+            "type": "decimal"
+        },
+        "category": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::category.category"
+        },
+        "description": {
+            "type": "text"
+        },
+        "link": {
+            "type": "string"
+        },
+        "expiry": {
+            "type": "datetime"
+        },
+        "currency": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::currency.currency"
+        },
+        "providers": {
+            "type": "component",
+            "repeatable": true,
+            "component": "order-providers.order-provider"
+        }
+    }
+}

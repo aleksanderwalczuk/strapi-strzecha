@@ -1,0 +1,19 @@
+{
+    "collectionName": "components_order_providers_order_providers",
+    "info": {
+        "displayName": "OrderProvider",
+        "icon": "allergies"
+    },
+    "options": {},
+    "attributes": {
+        "name": {
+            "type": "string"
+        },
+        "url": {
+            "type": "string"
+        },
+        "label": {
+            "type": "string"
+        }
+    }
+}
