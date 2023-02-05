@@ -87,5 +87,14 @@ export default factories.createCoreController('api::product.product', ({ strapi 
     } catch(error) {
       return error;
     }
+  },
+  async product(ctx) {
+    const { query } = ctx;
+
+    ctx.body = "ok";
+
+    console.log('SUCCESS!');
+
+    return 1;
   }
 }));
