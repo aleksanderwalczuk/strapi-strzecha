@@ -5,7 +5,7 @@ export default {
     { // Path defined with a URL parameter
       method: 'GET',
       path: '/product/',
-      handler: 'product.product',
+      handler: 'product.search',
     },
   ]
 }
