@@ -72,18 +72,9 @@ export default factories.createCoreController('api::product.product', ({ strapi 
       // @ts-ignore
       ctx.assert.notEqual(entity.results.length, 0, 404, `No data provided`);
       // @ts-ignore
-      const sanitizedEntity = await this.sanitizeOutput(entity.results, ctx);
+      const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
 
-      return this.transformResponse(sanitizedEntity).data.map(({ id, attributes}) => ({
-        id, ...attributes,
-        category: {
-          ...attributes.category.data.attributes,
-          id: attributes.category.data.id
-        },
-        images: attributes.images.data.map(({ id, attributes }) => ({
-          id, ...attributes
-        }))
-      }));
+      return sanitizedEntity;
     } catch(error) {
       return error;
     }
