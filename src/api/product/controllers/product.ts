@@ -87,5 +87,23 @@ export default factories.createCoreController('api::product.product', ({ strapi 
     } catch(error) {
       return error;
     }
+  },
+  async search(ctx) {
+    const { query } = ctx;
+
+    const entity = await strapi.entityService.findMany("api::product.product", {
+      populate: ['images', 'category', 'currency'],
+      filters: {
+        title: {
+          $containsi: query.q
+        },
+      },
+    });
+
+    console.log(entity);
+
+    const sanitized = await this.sanitizeOutput(entity);
+
+    return sanitized;
   }
 }));

@@ -20,6 +20,8 @@ import {
   UIDAttribute,
   SingleTypeSchema,
   TextAttribute,
+  ComponentAttribute,
+  ComponentSchema,
 } from '@strapi/strapi';
 
 export interface AdminPermission extends CollectionTypeSchema {
@@ -600,6 +602,7 @@ export interface ApiCategoryCategory extends CollectionTypeSchema {
     >;
     onHomepage: BooleanAttribute & DefaultTo<false>;
     uid: UIDAttribute<'api::category.category', 'name'>;
+    order: IntegerAttribute & DefaultTo<0>;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -618,11 +621,43 @@ export interface ApiCategoryCategory extends CollectionTypeSchema {
   };
 }
 
+export interface ApiCurrencyCurrency extends CollectionTypeSchema {
+  info: {
+    singularName: 'currency';
+    pluralName: 'currencies';
+    displayName: 'Currency';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: StringAttribute;
+    symbol: StringAttribute;
+    isBeforePrice: BooleanAttribute & RequiredAttribute & DefaultTo<false>;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    publishedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'api::currency.currency',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'api::currency.currency',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
 export interface ApiFooterFooter extends SingleTypeSchema {
   info: {
     singularName: 'footer';
     pluralName: 'footers';
-    displayName: 'Footer';
+    displayName: 'Contact';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -684,13 +719,18 @@ export interface ApiParentCategoryParentCategory extends CollectionTypeSchema {
     singularName: 'parent-category';
     pluralName: 'parent-categories';
     displayName: 'Parent Category';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     name: StringAttribute;
-    uid: UIDAttribute<'api::parent-category.parent-category', 'name'>;
+    uid: UIDAttribute<'api::parent-category.parent-category', 'name'> &
+      RequiredAttribute &
+      SetMinMaxLength<{
+        minLength: 3;
+      }>;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -720,8 +760,16 @@ export interface ApiProductProduct extends CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    title: StringAttribute;
-    uid: UIDAttribute<'api::product.product', 'title'>;
+    title: StringAttribute &
+      RequiredAttribute &
+      SetMinMaxLength<{
+        minLength: 1;
+      }>;
+    uid: UIDAttribute<'api::product.product', 'title'> &
+      RequiredAttribute &
+      SetMinMaxLength<{
+        minLength: 3;
+      }>;
     images: MediaAttribute;
     price: DecimalAttribute;
     category: RelationAttribute<
@@ -730,6 +778,14 @@ export interface ApiProductProduct extends CollectionTypeSchema {
       'api::category.category'
     >;
     description: TextAttribute;
+    link: StringAttribute;
+    expiry: DateTimeAttribute;
+    currency: RelationAttribute<
+      'api::product.product',
+      'oneToOne',
+      'api::currency.currency'
+    >;
+    providers: ComponentAttribute<'order-providers.order-provider', true>;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -748,6 +804,18 @@ export interface ApiProductProduct extends CollectionTypeSchema {
   };
 }
 
+export interface OrderProvidersOrderProvider extends ComponentSchema {
+  info: {
+    displayName: 'OrderProvider';
+    icon: 'allergies';
+  };
+  attributes: {
+    name: StringAttribute;
+    url: StringAttribute;
+    label: StringAttribute;
+  };
+}
+
 declare global {
   namespace Strapi {
     interface Schemas {
@@ -763,10 +831,12 @@ declare global {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::category.category': ApiCategoryCategory;
+      'api::currency.currency': ApiCurrencyCurrency;
       'api::footer.footer': ApiFooterFooter;
       'api::home-page.home-page': ApiHomePageHomePage;
       'api::parent-category.parent-category': ApiParentCategoryParentCategory;
       'api::product.product': ApiProductProduct;
+      'order-providers.order-provider': OrderProvidersOrderProvider;
     }
   }
 }
