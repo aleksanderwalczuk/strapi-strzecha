@@ -3,6 +3,7 @@
  */
 
 import { factories } from '@strapi/strapi'
+import { calculatePageCount } from '../../../utils/pageCount';
 
 function flatten(obj) {
   return {
@@ -60,25 +61,52 @@ export default factories.createCoreController('api::product.product', ({ strapi 
       ctx.body = err;
     }
   },
+
   async find(ctx) {
     const { query } = ctx;
+    const limit = 2;
 
-    try {
-      const entity = await strapi.service('api::product.product').find({
-        populate: ['images', 'category', 'currency'],
-        ...query
-      });
+    const entity = await strapi.entityService.findMany('api::product.product', {
+      sort: { id: 'desc' },
+      populate: ['images', 'category', 'currency'],
+      start: query.page != null ? (query.page - 1) * limit : 0,
+      limit,
+      filters: {
+        ...(ctx.query.category != null ? {
+            category: {
+              uid: ctx.query.category
+            }
+          } : {}
+        ),
+      },
+    });
 
-      // @ts-ignore
-      ctx.assert.notEqual(entity.results.length, 0, 404, `No data provided`);
-      // @ts-ignore
-      const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+    // @ts-ignore
+    ctx.assert.notEqual(entity.length, 0, 404, `No data provided`);
 
-      return sanitizedEntity;
-    } catch(error) {
-      return error;
-    }
+    // @ts-ignore
+    const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+
+    const count = await strapi.query('api::product.product').count({ where: {
+      ...(ctx.query.category != null ? {
+        category: {
+          uid: ctx.query.category
+        }
+      } : {}
+    ),
+    }});
+
+    return {
+      results: sanitizedEntity,
+      pagination: {
+        page: ctx.query.page ?? 1,
+        pageSize: limit,
+        pageCount: calculatePageCount(limit, count),
+        total: count,
+      }
+    };
   },
+
   async search(ctx) {
     const { query } = ctx;
 
@@ -90,8 +118,6 @@ export default factories.createCoreController('api::product.product', ({ strapi 
         },
       },
     });
-
-    console.log(entity);
 
     const sanitized = await this.sanitizeOutput(entity);
 
