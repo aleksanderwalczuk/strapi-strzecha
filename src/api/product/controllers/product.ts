@@ -64,7 +64,7 @@ export default factories.createCoreController('api::product.product', ({ strapi 
 
   async find(ctx) {
     const { query } = ctx;
-    const limit = 2;
+    const limit = 10;
 
     const entity = await strapi.entityService.findMany('api::product.product', {
       sort: { id: 'desc' },
@@ -99,7 +99,7 @@ export default factories.createCoreController('api::product.product', ({ strapi 
     return {
       results: sanitizedEntity,
       pagination: {
-        page: ctx.query.page ?? 1,
+        page: ctx.query.page ? Number(ctx.query.page) : 1,
         pageSize: limit,
         pageCount: calculatePageCount(limit, count),
         total: count,
