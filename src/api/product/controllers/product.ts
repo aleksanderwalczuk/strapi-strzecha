@@ -4,6 +4,7 @@
 
 import { factories } from '@strapi/strapi'
 import { calculatePageCount } from '../../../utils/pageCount';
+import { ProductInterface } from '../../../interfaces/Product';
 
 function flatten(obj) {
   return {
@@ -30,7 +31,7 @@ export default factories.createCoreController('api::product.product', ({ strapi 
       ctx.assert.notEqual(0, entity.results.length, 404, `Id ${id} not found`);
 
       // @ts-ignore
-      const [result] = entity.results as unknown[];
+      const [result] = entity.results as ProductInterface[];
 
       // @ts-ignore
       ctx.assert.equal(id, result.uid, 404, `Id ${id} not found`);
@@ -122,5 +123,35 @@ export default factories.createCoreController('api::product.product', ({ strapi 
     const sanitized = await this.sanitizeOutput(entity);
 
     return sanitized;
+  },
+
+  async related(ctx) {
+    const { uid, omit } = ctx.query;
+    const limit = 10;
+
+    ctx.assert(uid, 'Missing uid parameter', 400)
+
+    // @ts-ignore
+
+    ctx.assert(omit, 'Omit not found', 404)
+
+    const entity = await strapi.entityService.findMany("api::product.product", {
+      populate: ['images', 'currency'],
+      limit,
+      filters: {
+        "category": {
+          uid: {
+            $eq: uid
+          }
+        },
+        uid: {
+          $not: {
+            $eq: omit
+          }
+        }
+      },
+    });
+
+    return entity;
   }
 }));
