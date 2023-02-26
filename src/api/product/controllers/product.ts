@@ -85,9 +85,6 @@ export default factories.createCoreController('api::product.product', ({ strapi 
     // @ts-ignore
     ctx.assert.notEqual(entity.length, 0, 404, `No data provided`);
 
-    // @ts-ignore
-    const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
-
     const count = await strapi.query('api::product.product').count({ where: {
       ...(ctx.query.category != null ? {
         category: {
@@ -98,7 +95,7 @@ export default factories.createCoreController('api::product.product', ({ strapi 
     }});
 
     return {
-      results: sanitizedEntity,
+      results: entity,
       pagination: {
         page: ctx.query.page ? Number(ctx.query.page) : 1,
         pageSize: limit,
