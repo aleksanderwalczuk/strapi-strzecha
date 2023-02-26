@@ -2,10 +2,15 @@ import { factories } from '@strapi/strapi';
 
 export default {
   routes: [
-    { // Path defined with a URL parameter
+    {
       method: 'GET',
-      path: '/product/',
+      path: '/product/search',
       handler: 'product.search',
+    },
+    {
+      method: 'GET',
+      path: '/product/related',
+      handler: 'product.related',
     },
   ]
 }
