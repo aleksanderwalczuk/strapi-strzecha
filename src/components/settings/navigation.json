@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_settings_navigations",
+  "info": {
+    "displayName": "Navigation"
+  },
+  "options": {},
+  "attributes": {
+    "show_empty_categories": {
+      "type": "boolean"
+    },
+    "menu_image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
