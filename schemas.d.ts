@@ -887,7 +887,7 @@ export interface ApiSettingsSettings extends SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    social: ComponentAttribute<'settings.social', true>;
+    socials: ComponentAttribute<'settings.social', true>;
     contact: ComponentAttribute<'settings.contact'>;
     home_page: ComponentAttribute<'settings.home-page'>;
     navigation: ComponentAttribute<'settings.navigation'>;
@@ -955,7 +955,7 @@ export interface SettingsNavigation extends ComponentSchema {
 
 export interface SettingsSocial extends ComponentSchema {
   info: {
-    displayName: 'Social';
+    displayName: 'Socials';
     description: '';
   };
   attributes: {
