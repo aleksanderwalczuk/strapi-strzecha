@@ -12,7 +12,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "social": {
+    "socials": {
       "type": "component",
       "repeatable": true,
       "component": "settings.social"
