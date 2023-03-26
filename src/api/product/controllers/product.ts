@@ -5,6 +5,7 @@
 import { factories } from '@strapi/strapi'
 import { calculatePageCount } from '../../../utils/pageCount';
 import { ProductInterface } from '../../../interfaces/Product';
+import { Context } from 'koa'
 
 function flatten(obj) {
   return {
@@ -63,14 +64,14 @@ export default factories.createCoreController('api::product.product', ({ strapi 
     }
   },
 
-  async find(ctx) {
+  async find(ctx: Context) {
     const { query } = ctx;
     const limit = 10;
 
     const entity = await strapi.entityService.findMany('api::product.product', {
       sort: { id: 'desc' },
       populate: ['images', 'category', 'currency'],
-      start: query.page != null ? (query.page - 1) * limit : 0,
+      start: query.page != null ? (parseInt(query.page as string) - 1) * limit : 0,
       limit,
       filters: {
         ...(ctx.query.category != null ? {
@@ -126,7 +127,8 @@ export default factories.createCoreController('api::product.product', ({ strapi 
     const { uid, omit } = ctx.query;
     const limit = 10;
 
-    ctx.assert(uid, 'Missing uid parameter', 400)
+    // @ts-ignore
+    ctx.assert((uid as string) != null, 400, 'Missing uid parameter')
 
     // @ts-ignore
 

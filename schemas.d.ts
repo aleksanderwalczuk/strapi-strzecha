@@ -13,6 +13,7 @@ import {
   PasswordAttribute,
   BooleanAttribute,
   EnumerationAttribute,
+  BigIntegerAttribute,
   IntegerAttribute,
   DecimalAttribute,
   SetMinMax,
@@ -212,7 +213,7 @@ export interface AdminApiToken extends CollectionTypeSchema {
       'admin::api-token-permission'
     >;
     expiresAt: DateTimeAttribute;
-    lifespan: IntegerAttribute;
+    lifespan: BigIntegerAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     createdBy: RelationAttribute<
@@ -267,6 +268,108 @@ export interface AdminApiTokenPermission extends CollectionTypeSchema {
       PrivateAttribute;
     updatedBy: RelationAttribute<
       'admin::api-token-permission',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
+export interface AdminTransferToken extends CollectionTypeSchema {
+  info: {
+    name: 'Transfer Token';
+    singularName: 'transfer-token';
+    pluralName: 'transfer-tokens';
+    displayName: 'Transfer Token';
+    description: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: StringAttribute &
+      RequiredAttribute &
+      UniqueAttribute &
+      SetMinMaxLength<{
+        minLength: 1;
+      }>;
+    description: StringAttribute &
+      SetMinMaxLength<{
+        minLength: 1;
+      }> &
+      DefaultTo<''>;
+    accessKey: StringAttribute &
+      RequiredAttribute &
+      SetMinMaxLength<{
+        minLength: 1;
+      }>;
+    lastUsedAt: DateTimeAttribute;
+    permissions: RelationAttribute<
+      'admin::transfer-token',
+      'oneToMany',
+      'admin::transfer-token-permission'
+    >;
+    expiresAt: DateTimeAttribute;
+    lifespan: BigIntegerAttribute;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'admin::transfer-token',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'admin::transfer-token',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
+export interface AdminTransferTokenPermission extends CollectionTypeSchema {
+  info: {
+    name: 'Transfer Token Permission';
+    description: '';
+    singularName: 'transfer-token-permission';
+    pluralName: 'transfer-token-permissions';
+    displayName: 'Transfer Token Permission';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    action: StringAttribute &
+      RequiredAttribute &
+      SetMinMaxLength<{
+        minLength: 1;
+      }>;
+    token: RelationAttribute<
+      'admin::transfer-token-permission',
+      'manyToOne',
+      'admin::transfer-token'
+    >;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'admin::transfer-token-permission',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'admin::transfer-token-permission',
       'oneToOne',
       'admin::user'
     > &
@@ -652,37 +755,6 @@ export interface ApiCurrencyCurrency extends CollectionTypeSchema {
   };
 }
 
-export interface ApiFooterFooter extends SingleTypeSchema {
-  info: {
-    singularName: 'footer';
-    pluralName: 'footers';
-    displayName: 'Contact';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    phone: StringAttribute;
-    email: EmailAttribute;
-    createdAt: DateTimeAttribute;
-    updatedAt: DateTimeAttribute;
-    publishedAt: DateTimeAttribute;
-    createdBy: RelationAttribute<
-      'api::footer.footer',
-      'oneToOne',
-      'admin::user'
-    > &
-      PrivateAttribute;
-    updatedBy: RelationAttribute<
-      'api::footer.footer',
-      'oneToOne',
-      'admin::user'
-    > &
-      PrivateAttribute;
-  };
-}
-
 export interface ApiHomePageHomePage extends SingleTypeSchema {
   info: {
     singularName: 'home-page';
@@ -804,6 +876,39 @@ export interface ApiProductProduct extends CollectionTypeSchema {
   };
 }
 
+export interface ApiSettingsSettings extends SingleTypeSchema {
+  info: {
+    singularName: 'settings';
+    pluralName: 'page-settings';
+    displayName: 'Settings';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    socials: ComponentAttribute<'settings.social', true>;
+    contact: ComponentAttribute<'settings.contact'>;
+    home_page: ComponentAttribute<'settings.home-page'>;
+    navigation: ComponentAttribute<'settings.navigation'>;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    publishedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'api::settings.settings',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'api::settings.settings',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
 export interface OrderProvidersOrderProvider extends ComponentSchema {
   info: {
     displayName: 'OrderProvider';
@@ -816,6 +921,53 @@ export interface OrderProvidersOrderProvider extends ComponentSchema {
   };
 }
 
+export interface SettingsContact extends ComponentSchema {
+  info: {
+    displayName: 'Contact';
+  };
+  attributes: {
+    phone: StringAttribute;
+    address_1: StringAttribute;
+    address_2: StringAttribute;
+    email: EmailAttribute;
+  };
+}
+
+export interface SettingsHomePage extends ComponentSchema {
+  info: {
+    displayName: 'Home Page';
+  };
+  attributes: {
+    description: TextAttribute;
+    coverImage: MediaAttribute;
+  };
+}
+
+export interface SettingsNavigation extends ComponentSchema {
+  info: {
+    displayName: 'Navigation';
+  };
+  attributes: {
+    show_empty_categories: BooleanAttribute;
+    menu_image: MediaAttribute;
+  };
+}
+
+export interface SettingsSocial extends ComponentSchema {
+  info: {
+    displayName: 'Socials';
+    description: '';
+  };
+  attributes: {
+    name: StringAttribute;
+    label: StringAttribute &
+      SetMinMaxLength<{
+        maxLength: 2;
+      }>;
+    url: StringAttribute;
+  };
+}
+
 declare global {
   namespace Strapi {
     interface Schemas {
@@ -824,6 +976,8 @@ declare global {
       'admin::role': AdminRole;
       'admin::api-token': AdminApiToken;
       'admin::api-token-permission': AdminApiTokenPermission;
+      'admin::transfer-token': AdminTransferToken;
+      'admin::transfer-token-permission': AdminTransferTokenPermission;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
@@ -832,11 +986,15 @@ declare global {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::category.category': ApiCategoryCategory;
       'api::currency.currency': ApiCurrencyCurrency;
-      'api::footer.footer': ApiFooterFooter;
       'api::home-page.home-page': ApiHomePageHomePage;
       'api::parent-category.parent-category': ApiParentCategoryParentCategory;
       'api::product.product': ApiProductProduct;
+      'api::settings.settings': ApiSettingsSettings;
       'order-providers.order-provider': OrderProvidersOrderProvider;
+      'settings.contact': SettingsContact;
+      'settings.home-page': SettingsHomePage;
+      'settings.navigation': SettingsNavigation;
+      'settings.social': SettingsSocial;
     }
   }
 }

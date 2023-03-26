@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_settings_home_pages",
+  "info": {
+    "displayName": "Home Page"
+  },
+  "options": {},
+  "attributes": {
+    "description": {
+      "type": "text"
+    },
+    "coverImage": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
