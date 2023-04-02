@@ -2,10 +2,14 @@
  * product controller
  */
 
-import { factories } from '@strapi/strapi'
+import { GetAttributesValues, factories } from '@strapi/strapi'
 import { calculatePageCount } from '../../../utils/pageCount';
 import { ProductInterface } from '../../../interfaces/Product';
 import { Context } from 'koa'
+
+type QueryResponse<T> = {
+  results: T;
+};
 
 function flatten(obj) {
   return {
@@ -26,22 +30,16 @@ export default factories.createCoreController('api::product.product', ({ strapi 
           uid: id
         },
         ...query
-      });
+      }) as QueryResponse<GetAttributesValues<"api::product.product">[]>;
 
-      // @ts-ignore
       ctx.assert.notEqual(0, entity.results.length, 404, `Id ${id} not found`);
 
-      // @ts-ignore
-      const [result] = entity.results as ProductInterface[];
+      const [result] = entity.results;
 
-      // @ts-ignore
       ctx.assert.equal(id, result.uid, 404, `Id ${id} not found`);
 
 
-      const sanitizedEntity = await this.sanitizeOutput(result, ctx);
-
-      // console.log("RES2", sanitizedEntity);
-
+      const sanitizedEntity: QueryResponse<GetAttributesValues<"api::product.product">[]> = await this.sanitizeOutput(result, ctx);
 
       const transformed = this.transformResponse(sanitizedEntity, {});
 
@@ -81,9 +79,8 @@ export default factories.createCoreController('api::product.product', ({ strapi 
           } : {}
         ),
       },
-    });
+    }) as GetAttributesValues<"api::product.product">[];
 
-    // @ts-ignore
     ctx.assert.notEqual(entity.length, 0, 404, `No data provided`);
 
     const count = await strapi.query('api::product.product').count({ where: {
@@ -116,23 +113,21 @@ export default factories.createCoreController('api::product.product', ({ strapi 
           $containsi: query.q
         },
       },
-    });
+    }) as GetAttributesValues<"api::product.product">[];
 
     const sanitized = await this.sanitizeOutput(entity);
 
     return sanitized;
   },
 
-  async related(ctx) {
+  async related(ctx: Context) {
     const { uid, omit } = ctx.query;
     const limit = 10;
 
-    // @ts-ignore
-    ctx.assert((uid as string) != null, 400, 'Missing uid parameter')
 
-    // @ts-ignore
+    ctx.assert((uid as string) != null, 400, 'Missing uid parameter');
 
-    ctx.assert(omit, 'Omit not found', 404)
+    ctx.assert(omit,  404, 'Omit not found');
 
     const entity = await strapi.entityService.findMany("api::product.product", {
       populate: ['images', 'currency'],
@@ -149,7 +144,7 @@ export default factories.createCoreController('api::product.product', ({ strapi 
           }
         }
       },
-    });
+    }) as GetAttributesValues<"api::product.product">[];
 
     return entity;
   }

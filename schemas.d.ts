@@ -19,9 +19,9 @@ import {
   SetMinMax,
   MediaAttribute,
   UIDAttribute,
-  SingleTypeSchema,
   TextAttribute,
   ComponentAttribute,
+  SingleTypeSchema,
   ComponentSchema,
 } from '@strapi/strapi';
 
@@ -755,37 +755,6 @@ export interface ApiCurrencyCurrency extends CollectionTypeSchema {
   };
 }
 
-export interface ApiHomePageHomePage extends SingleTypeSchema {
-  info: {
-    singularName: 'home-page';
-    pluralName: 'home-pages';
-    displayName: 'Home Page';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    coverImage: MediaAttribute;
-    description: TextAttribute;
-    createdAt: DateTimeAttribute;
-    updatedAt: DateTimeAttribute;
-    publishedAt: DateTimeAttribute;
-    createdBy: RelationAttribute<
-      'api::home-page.home-page',
-      'oneToOne',
-      'admin::user'
-    > &
-      PrivateAttribute;
-    updatedBy: RelationAttribute<
-      'api::home-page.home-page',
-      'oneToOne',
-      'admin::user'
-    > &
-      PrivateAttribute;
-  };
-}
-
 export interface ApiParentCategoryParentCategory extends CollectionTypeSchema {
   info: {
     singularName: 'parent-category';
@@ -986,7 +955,6 @@ declare global {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::category.category': ApiCategoryCategory;
       'api::currency.currency': ApiCurrencyCurrency;
-      'api::home-page.home-page': ApiHomePageHomePage;
       'api::parent-category.parent-category': ApiParentCategoryParentCategory;
       'api::product.product': ApiProductProduct;
       'api::settings.settings': ApiSettingsSettings;

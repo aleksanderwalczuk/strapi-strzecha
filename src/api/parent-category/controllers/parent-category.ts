@@ -2,7 +2,11 @@
  * parent-category controller
  */
 
-import { factories } from '@strapi/strapi'
+import { GetAttributesValues, factories } from '@strapi/strapi'
+
+type QueryResponse<T> = {
+  results: T;
+};
 
 export default factories.createCoreController('api::parent-category.parent-category', ({ strapi }) => ({
   async find(ctx) {
@@ -11,9 +15,9 @@ export default factories.createCoreController('api::parent-category.parent-categ
     try {
       const entity = await strapi.service('api::parent-category.parent-category').find({
         ...query
-      });
-      // @ts-ignore
-      const sanitizedEntity = await this.sanitizeOutput(entity.results, ctx);
+      }) as QueryResponse<GetAttributesValues<"api::parent-category.parent-category">>;
+
+      const sanitizedEntity: QueryResponse<GetAttributesValues<"api::parent-category.parent-category">> = await this.sanitizeOutput(entity.results, ctx);
 
       return sanitizedEntity;
     } catch (err) {
