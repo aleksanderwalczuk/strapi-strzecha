@@ -1,4 +1,5 @@
-import { factories } from '@strapi/strapi'
+import { GetAttributesValues, factories } from '@strapi/strapi'
+import { getSettings } from '../../../utils/settings';
 
 export default factories.createCoreController('api::category.category', ({ strapi }) => ({
   async findOne(ctx) {
@@ -29,6 +30,16 @@ export default factories.createCoreController('api::category.category', ({ strap
     const { query } = ctx;
 
     try {
+      const { navigation } = await getSettings({
+        populate: {
+          navigation: true,
+        }
+      })
+
+      if (navigation.show_empty_categories === false) {
+        console.log(`should filter empty categories`);
+      }
+
       const entity = await strapi.service('api::category.category').find({
         populate: ['image', 'parentCategory'],
         ...query
