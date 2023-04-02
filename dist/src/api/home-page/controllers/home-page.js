@@ -23,3 +23,4 @@ exports.default = strapi_1.factories.createCoreController('api::home-page.home-p
         return data;
     }
 }));
+//# sourceMappingURL=home-page.js.map

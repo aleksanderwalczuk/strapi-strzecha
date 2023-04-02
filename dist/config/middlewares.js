@@ -12,3 +12,4 @@ exports.default = [
     'strapi::favicon',
     'strapi::public',
 ];
+//# sourceMappingURL=middlewares.js.map
