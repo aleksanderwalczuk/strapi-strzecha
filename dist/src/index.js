@@ -17,3 +17,4 @@ exports.default = {
      */
     bootstrap( /*{ strapi }*/) { },
 };
+//# sourceMappingURL=index.js.map

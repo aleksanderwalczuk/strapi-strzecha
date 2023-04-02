@@ -8,3 +8,4 @@ exports.default = ({ env }) => ({
         salt: env('API_TOKEN_SALT'),
     },
 });
+//# sourceMappingURL=admin.js.map

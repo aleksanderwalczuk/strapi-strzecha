@@ -20,3 +20,4 @@ exports.default = strapi_1.factories.createCoreController('api::parent-category.
         }
     }
 }));
+//# sourceMappingURL=parent-category.js.map

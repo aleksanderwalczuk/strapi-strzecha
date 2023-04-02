@@ -13,3 +13,4 @@ exports.default = ({ env }) => ({
         useNullAsDefault: true,
     },
 });
+//# sourceMappingURL=database.js.map
