@@ -755,6 +755,25 @@ export interface ApiCurrencyCurrency extends CollectionTypeSchema {
   };
 }
 
+export interface ApiIgIg extends CollectionTypeSchema {
+  info: {
+    singularName: 'ig';
+    pluralName: 'igs';
+    displayName: 'ig';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<'api::ig.ig', 'oneToOne', 'admin::user'> &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<'api::ig.ig', 'oneToOne', 'admin::user'> &
+      PrivateAttribute;
+  };
+}
+
 export interface ApiParentCategoryParentCategory extends CollectionTypeSchema {
   info: {
     singularName: 'parent-category';
@@ -772,6 +791,7 @@ export interface ApiParentCategoryParentCategory extends CollectionTypeSchema {
       SetMinMaxLength<{
         minLength: 3;
       }>;
+    visible: BooleanAttribute & RequiredAttribute & DefaultTo<true>;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -955,6 +975,7 @@ declare global {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::category.category': ApiCategoryCategory;
       'api::currency.currency': ApiCurrencyCurrency;
+      'api::ig.ig': ApiIgIg;
       'api::parent-category.parent-category': ApiParentCategoryParentCategory;
       'api::product.product': ApiProductProduct;
       'api::settings.settings': ApiSettingsSettings;

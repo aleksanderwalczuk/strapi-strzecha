@@ -4,7 +4,6 @@
 
 import { GetAttributesValues, factories } from '@strapi/strapi'
 import { calculatePageCount } from '../../../utils/pageCount';
-import { ProductInterface } from '../../../interfaces/Product';
 import { Context } from 'koa'
 
 type QueryResponse<T> = {

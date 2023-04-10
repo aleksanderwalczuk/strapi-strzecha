@@ -20,6 +20,11 @@
       "targetField": "name",
       "required": true,
       "minLength": 3
+    },
+    "visible": {
+      "type": "boolean",
+      "default": true,
+      "required": true
     }
   }
 }
