@@ -1,0 +1,15 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ig",
+  "info": {
+    "singularName": "ig",
+    "pluralName": "igs",
+    "displayName": "ig"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+  }
+}
