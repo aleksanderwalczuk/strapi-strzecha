@@ -47,7 +47,7 @@ export default factories.createCoreController('api::product.product', ({ strapi 
 
       return {
         ...data,
-        images: (data.images != null ?
+        images: (data.images != null && data.images.data != null ?
             data.images.data.map(({attributes, id}) => (
               {...attributes, id}
             ))
