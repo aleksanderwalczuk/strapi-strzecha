@@ -4,12 +4,26 @@
   "info": {
     "singularName": "ig",
     "pluralName": "igs",
-    "displayName": "ig"
+    "displayName": "ig",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
+    "access_token": {
+      "type": "string",
+      "private": true,
+      "minLength": 1
+    },
+    "token_type": {
+      "type": "string",
+      "private": true
+    },
+    "expires_in": {
+      "type": "integer",
+      "private": true
+    }
   }
 }

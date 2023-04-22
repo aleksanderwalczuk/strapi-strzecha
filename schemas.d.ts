@@ -760,11 +760,19 @@ export interface ApiIgIg extends CollectionTypeSchema {
     singularName: 'ig';
     pluralName: 'igs';
     displayName: 'ig';
+    description: '';
   };
   options: {
     draftAndPublish: false;
   };
   attributes: {
+    access_token: StringAttribute &
+      PrivateAttribute &
+      SetMinMaxLength<{
+        minLength: 1;
+      }>;
+    token_type: StringAttribute & PrivateAttribute;
+    expires_in: IntegerAttribute & PrivateAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     createdBy: RelationAttribute<'api::ig.ig', 'oneToOne', 'admin::user'> &
