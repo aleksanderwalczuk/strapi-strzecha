@@ -63,6 +63,7 @@ export async function cleanupTokens(strapi) {
 }
 
 export async function processTokensJob(strapi: Strapi.Strapi) {
+  console.log("processTokensJob start");
   const token = await getToken(strapi);
 
   if (token != null) {
@@ -78,4 +79,5 @@ export async function processTokensJob(strapi: Strapi.Strapi) {
     await createTokenEntry(strapi);
     await cleanupTokens(strapi);
   }
+  console.log("processTokensJob finished");
 }
