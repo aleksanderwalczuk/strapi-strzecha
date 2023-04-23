@@ -2071,6 +2071,14 @@
     "@strapi/utils" "4.9.1"
     fs-extra "10.0.0"
 
+"@strapi/provider-upload-local@^4.9.2":
+  version "4.9.2"
+  resolved "https://registry.yarnpkg.com/@strapi/provider-upload-local/-/provider-upload-local-4.9.2.tgz#2fc10c803a55ff574b2564255099c18b5d3b9ea7"
+  integrity sha512-2LBDx7upUR5eofZQWMCA9gic5gqSKkPi0TAP3gIXk3OR4iGdOgmdPZitaEGq98TGLcwXGh2vbPxEgOy/syhATQ==
+  dependencies:
+    "@strapi/utils" "4.9.2"
+    fs-extra "10.0.0"
+
 "@strapi/strapi@4.9.1", "@strapi/strapi@^4.9.1":
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/@strapi/strapi/-/strapi-4.9.1.tgz#6e5f6299c5b70fe8a306c761e4e8155978bea77a"
@@ -2147,6 +2155,18 @@
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/@strapi/utils/-/utils-4.9.1.tgz#c0fa0c329e9a102f3a8d527d820a523883ec1020"
   integrity sha512-FC6iIyHc5OMu46soiQPnmdrfkBsYKrBhogmYMqDwwqwTbT7ynXL2EgRz1T8/Y0Zb8YvjvWcaOYYF17AhWB9Mug==
+  dependencies:
+    "@sindresorhus/slugify" "1.1.0"
+    date-fns "2.29.3"
+    http-errors "1.8.1"
+    lodash "4.17.21"
+    p-map "4.0.0"
+    yup "0.32.9"
+
+"@strapi/utils@4.9.2":
+  version "4.9.2"
+  resolved "https://registry.yarnpkg.com/@strapi/utils/-/utils-4.9.2.tgz#fed14ff4d67aa996c55c5559f623036415119ff3"
+  integrity sha512-qYVgOzohrM5eXRoPdnzwmgBK1Vbgfl2K+NAQ7nhCRUFn36qC8RwawxyJGEgek+DzERSP9gnYqH9vFQruPhCbbg==
   dependencies:
     "@sindresorhus/slugify" "1.1.0"
     date-fns "2.29.3"
