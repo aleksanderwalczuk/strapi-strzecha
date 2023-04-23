@@ -9,24 +9,25 @@ export default ({ env }) => [
           'connect-src': ["'self'", 'https:'],
           'img-src': [
             "'self'",
-            'strapi.io',
-            "blob:",
-            "dl.airtable.com",
-            `${env('AWS_BUCKET')}.s3.${env('AWS_REGION')}.amazonaws.com`,
-            `https://s3.${env("AWS_REGION")}.amazonaws.com/${env(
-              "AWS_BUCKET"
-            )}/`,
-            "https://strapi-strzecha-production.up.railway.app/"
+            'data:',
+            'blob:',
+            'res.cloudinary.com', // cloudinary images
+            'lh3.googleusercontent.com', // google avatars
+            'platform-lookaside.fbsbx.com', // facebook avatars
+            'dl.airtable.com', // strapi marketplace
+            `https://${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com`,
+            "https://strzecha-aws-s3-images-bucket.s3.eu-north-1.amazonaws.com/*"
           ],
-          "media-src": [
+          'media-src': [
             "'self'",
-            "data:",
-            "blob:",
-            "dl.airtable.com",
-            `https://s3.${env("AWS_REGION")}.amazonaws.com/${env(
-              "MEDIA_BUCKET"
-            )}/`,
-            "https://strapi-strzecha-production.up.railway.app/"
+            'data:',
+            'blob:',
+            'res.cloudinary.com', // cloudinary images
+            'lh3.googleusercontent.com', // google avatars
+            'platform-lookaside.fbsbx.com', // facebook avatars
+            'dl.airtable.com', // strapi marketplace
+            `https://${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com`,
+            "https://strzecha-aws-s3-images-bucket.s3.eu-north-1.amazonaws.com/*"
           ],
           upgradeInsecureRequests: null,
         },
