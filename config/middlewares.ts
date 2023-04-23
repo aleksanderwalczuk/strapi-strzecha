@@ -1,4 +1,4 @@
-export default [
+export default ({ env }) => [
   'strapi::errors',
   {
     name: 'strapi::security',
@@ -9,18 +9,10 @@ export default [
           'connect-src': ["'self'", 'https:'],
           'img-src': [
             "'self'",
-            'data:',
-            'blob:',
-            'dl.airtable.com',
-            'strzecha.s3.eu-north-1.amazonaws.com',,
+            'strapi.io',
+            `${env('AWS_BUCKET')}.s3.${env('AWS_REGION')}.amazonaws.com`
           ],
-          'media-src': [
-            "'self'",
-            'data:',
-            'blob:',
-            'dl.airtable.com',
-            'strzecha.s3.eu-north-1.amazonaws.com',
-          ],
+          'media-src': ["'self'", 'blob:', 'data:', 'cdn.jsdelivr.net', 'strapi.io', `${env('AWS_BUCKET')}.s3.amazonaws.com`],
           upgradeInsecureRequests: null,
         },
       },
