@@ -10,9 +10,22 @@ export default ({ env }) => [
           'img-src': [
             "'self'",
             'strapi.io',
-            `${env('AWS_BUCKET')}.s3.${env('AWS_REGION')}.amazonaws.com`
+            "blob:",
+            "dl.airtable.com",
+            `${env('AWS_BUCKET')}.s3.${env('AWS_REGION')}.amazonaws.com`,
+            `https://s3.${env("AWS_REGION")}.amazonaws.com/${env(
+              "AWS_BUCKET"
+            )}/`
           ],
-          'media-src': ["'self'", 'blob:', 'data:', 'cdn.jsdelivr.net', 'strapi.io', `${env('AWS_BUCKET')}.s3.amazonaws.com`],
+          "media-src": [
+            "'self'",
+            "data:",
+            "blob:",
+            "dl.airtable.com",
+            `https://s3.${env("AWS_REGION")}.amazonaws.com/${env(
+              "MEDIA_BUCKET"
+            )}/`,
+          ],
           upgradeInsecureRequests: null,
         },
       },
