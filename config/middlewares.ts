@@ -15,7 +15,8 @@ export default ({ env }) => [
             `${env('AWS_BUCKET')}.s3.${env('AWS_REGION')}.amazonaws.com`,
             `https://s3.${env("AWS_REGION")}.amazonaws.com/${env(
               "AWS_BUCKET"
-            )}/`
+            )}/`,
+            "https://strapi-strzecha-production.up.railway.app/"
           ],
           "media-src": [
             "'self'",
@@ -25,6 +26,7 @@ export default ({ env }) => [
             `https://s3.${env("AWS_REGION")}.amazonaws.com/${env(
               "MEDIA_BUCKET"
             )}/`,
+            "https://strapi-strzecha-production.up.railway.app/"
           ],
           upgradeInsecureRequests: null,
         },
