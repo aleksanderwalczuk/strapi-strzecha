@@ -1,11 +1,30 @@
 import { GetAttributesValues } from "@strapi/strapi";
 import axios from "axios";
+import dayjs from "dayjs";
 
-export async function getToken(strapi: Strapi.Strapi): Promise<GetAttributesValues<"api::ig.ig"> | null> {
-  const entry: GetAttributesValues<"api::ig.ig">[] = await strapi.db.query("api::ig.ig").findMany({
-    limit: 1,
-    orderBy: { createdAt: "desc" },
-  });
+type token = {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+};
+
+function aboutToExpire(token: GetAttributesValues<"api::ig.ig">, daysBefore = 20) {
+  const created = dayjs(token.createdAt);
+  const expiry = created.add(token.expires_in, "s");
+  const daysBeforeExpiration = expiry.subtract(daysBefore, "days");
+
+  return dayjs().isAfter(daysBeforeExpiration);
+}
+
+export async function getToken(
+  strapi: Strapi.Strapi
+): Promise<GetAttributesValues<"api::ig.ig"> | null> {
+  const entry: GetAttributesValues<"api::ig.ig">[] = await strapi.db
+    .query("api::ig.ig")
+    .findMany({
+      limit: 1,
+      orderBy: { createdAt: "desc" },
+    });
 
   if (entry.length > 0) {
     return entry[0];
@@ -19,22 +38,21 @@ export async function fetchToken(strapi: Strapi.Strapi) {
 
   const stored = await getToken(strapi);
 
-  const req = await axios.get<{
-    access_token: string;
-    token_type: string;
-    expires_in: number;
-  }>(url, {
-    params: {
-      grant_type: "ig_refresh_token",
-      access_token: stored == null ? process.env.IG_TOKEN : stored.access_token,
-    },
-  });
+  try {
+    const req = await axios.get<token>(url, {
+      params: {
+        grant_type: "ig_refresh_token",
+        access_token:
+          stored == null ? process.env.IG_TOKEN : stored.access_token,
+      },
+    });
 
-  if (req.status === 200) {
-    return req.data;
+    if (req.status === 200) {
+      return req.data;
+    }
+  } catch (error) {
+    throw Error("Failed to retrieve api token");
   }
-
-  throw Error("Failed to retrieve api token");
 }
 
 export async function createTokenEntry(strapi: Strapi.Strapi) {
@@ -53,7 +71,7 @@ export async function cleanupTokens(strapi) {
     orderBy: { createdAt: "asc" },
   });
 
-  if (tokens.length >= 3) {
+  if (tokens.length >= 4) {
     const [oldest] = tokens;
 
     await strapi.db.query("api::ig.ig").delete({
@@ -67,17 +85,16 @@ export async function processTokensJob(strapi: Strapi.Strapi) {
   const token = await getToken(strapi);
 
   if (token != null) {
-    const created = new Date(token.createdAt);
+    const shouldRefetch = aboutToExpire(token);
 
-    const expiry = new Date(created.getTime() + (token as any).expires_in * 1000);
-    const diffInDays = new Date(expiry).getTime() - created.getTime();
-
-    if (diffInDays < 20) {
+    if (shouldRefetch) {
       await createTokenEntry(strapi);
     }
   } else {
     await createTokenEntry(strapi);
-    await cleanupTokens(strapi);
   }
+
+  await cleanupTokens(strapi);
+
   console.log("processTokensJob finished");
 }
