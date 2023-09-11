@@ -10,6 +10,53 @@ type QueryResponse<T> = {
   results: T;
 };
 
+function getQueryFilters(ctx) {
+  const { query } = ctx;
+  let limit = 10;
+  let start = 0;
+  let filters = {};
+
+  if ((query.pagination as any)?.pageSize) {
+    limit = parseInt((query.pagination as any)?.pageSize, 10);
+  }
+
+  if (query.page != null) {
+    start = (parseInt(query.page as string) - 1) * limit;
+  }
+
+  if (
+    (query.pagination as any)?.page != null &&
+    (query.pagination as any)?.page != "1"
+  ) {
+    start = (query.pagination as any).page * limit;
+  }
+
+  if (ctx.query.category != null) {
+    filters = {
+      category: {
+        uid: ctx.query.category,
+      },
+    };
+  }
+
+  if (ctx.query.filters) {
+    filters = ctx.query.filters;
+  }
+
+  if (ctx.query.omit) {
+    filters = {
+      ...filters,
+      uid: {
+        $not: {
+          $eq: ctx.query.omit,
+        },
+      },
+    };
+  }
+
+  return { start, limit, filters };
+}
+
 function flatten(obj) {
   return {
     id: obj.data.id,
@@ -74,43 +121,22 @@ export default factories.createCoreController(
     },
 
     async find(ctx: Context) {
-      const { query } = ctx;
-      const limit = 10;
-
+      const { start, limit, filters } = getQueryFilters(ctx);
       const entity = (await strapi.entityService.findMany(
         "api::product.product",
         {
           sort: { id: "desc" },
           populate: ["images", "category", "currency"],
-          start:
-            query.page != null
-              ? (parseInt(query.page as string) - 1) * limit
-              : 0,
+          start,
           limit,
-          filters: {
-            ...(ctx.query.category != null
-              ? {
-                  category: {
-                    uid: ctx.query.category,
-                  },
-                }
-              : {}),
-          },
+          filters,
         }
       )) as GetAttributesValues<"api::product.product">[];
 
       ctx.assert.notEqual(entity.length, 0, 404, `No data provided`);
 
       const count = await strapi.query("api::product.product").count({
-        where: {
-          ...(ctx.query.category != null
-            ? {
-                category: {
-                  uid: ctx.query.category,
-                },
-              }
-            : {}),
-        },
+        where: filters,
       });
 
       return {
@@ -146,7 +172,8 @@ export default factories.createCoreController(
 
     async related(ctx: Context) {
       const { uid, omit } = ctx.query;
-      const limit = 10;
+
+      const { limit, filters } = getQueryFilters(ctx);
 
       ctx.assert((uid as string) != null, 400, "Missing uid parameter");
 
@@ -157,18 +184,7 @@ export default factories.createCoreController(
         {
           populate: ["images", "currency"],
           limit,
-          filters: {
-            category: {
-              uid: {
-                $eq: uid,
-              },
-            },
-            uid: {
-              $not: {
-                $eq: omit,
-              },
-            },
-          },
+          filters,
         }
       )) as GetAttributesValues<"api::product.product">[];
 
