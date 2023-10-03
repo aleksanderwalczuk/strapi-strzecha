@@ -8,7 +8,10 @@ type token = {
   expires_in: number;
 };
 
-function aboutToExpire(token: GetAttributesValues<"api::ig.ig">, daysBefore = 20) {
+function aboutToExpire(
+  token: GetAttributesValues<"api::ig.ig">,
+  daysBefore = 20
+) {
   const created = dayjs(token.createdAt);
   const expiry = created.add(token.expires_in, "s");
   const daysBeforeExpiration = expiry.subtract(daysBefore, "days");

@@ -696,7 +696,7 @@ export interface ApiCategoryCategory extends CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    name: StringAttribute;
+    name: StringAttribute & RequiredAttribute;
     image: MediaAttribute;
     parentCategory: RelationAttribute<
       'api::category.category',
@@ -704,7 +704,7 @@ export interface ApiCategoryCategory extends CollectionTypeSchema {
       'api::parent-category.parent-category'
     >;
     onHomepage: BooleanAttribute & DefaultTo<false>;
-    uid: UIDAttribute<'api::category.category', 'name'>;
+    uid: UIDAttribute<'api::category.category', 'name'> & RequiredAttribute;
     order: IntegerAttribute & DefaultTo<0>;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
@@ -729,13 +729,14 @@ export interface ApiCurrencyCurrency extends CollectionTypeSchema {
     singularName: 'currency';
     pluralName: 'currencies';
     displayName: 'Currency';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    name: StringAttribute;
-    symbol: StringAttribute;
+    name: StringAttribute & RequiredAttribute;
+    symbol: StringAttribute & RequiredAttribute;
     isBeforePrice: BooleanAttribute & RequiredAttribute & DefaultTo<false>;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
