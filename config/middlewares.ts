@@ -42,7 +42,7 @@ export default ({ env }) => [
     config: {
       enabled: true,
       header: "*",
-      origin: ["http://localhost:3000", "http://localhost:3001"],
+      origin: [`${env("CORS_ORIGIN_1")}`, `${env("CORS_ORIGIN_2")}`],
     },
   },
   "strapi::poweredBy",
