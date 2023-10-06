@@ -37,6 +37,7 @@ export default ({ env }) => [
       },
     },
   },
+  "strapi::poweredBy",
   {
     name: "strapi::cors",
     config: {
@@ -45,7 +46,6 @@ export default ({ env }) => [
       origin: [`${env("CORS_ORIGIN_1")}`, `${env("CORS_ORIGIN_2")}`],
     },
   },
-  "strapi::poweredBy",
   "strapi::logger",
   "strapi::query",
   "strapi::body",

@@ -57,6 +57,11 @@
       "type": "component",
       "repeatable": true,
       "component": "order-providers.order-provider"
+    },
+    "recommended": {
+      "type": "boolean",
+      "default": false,
+      "required": false
     }
   }
 }
