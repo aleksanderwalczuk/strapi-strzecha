@@ -16,9 +16,7 @@ export default ({ env }) => [
             "platform-lookaside.fbsbx.com", // facebook avatars
             "dl.airtable.com", // strapi marketplace
             "market-assets.strapi.io",
-            `https://${env("AWS_BUCKET")}.s3.${env(
-              "AWS_REGION"
-            )}.amazonaws.com`,
+            `${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com`,
           ],
           "media-src": [
             "'self'",
@@ -29,9 +27,7 @@ export default ({ env }) => [
             "platform-lookaside.fbsbx.com", // facebook avatars
             "dl.airtable.com", // strapi marketplace
             "market-assets.strapi.io",
-            `https://${env("AWS_BUCKET")}.s3.${env(
-              "AWS_REGION"
-            )}.amazonaws.com`,
+            `${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com`,
           ],
           upgradeInsecureRequests: null,
           frameAncestors: ["self"],
