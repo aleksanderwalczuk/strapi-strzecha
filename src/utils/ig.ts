@@ -1,4 +1,4 @@
-import { GetAttributesValues } from "@strapi/strapi";
+import type { Strapi } from "@strapi/strapi";
 import axios from "axios";
 import dayjs from "dayjs";
 
@@ -9,7 +9,7 @@ type token = {
 };
 
 function aboutToExpire(
-  token: GetAttributesValues<"api::ig.ig">,
+  token: Strapi.Schemas["api::ig.ig"]["attributes"],
   daysBefore = 20
 ) {
   const created = dayjs(token.createdAt);
@@ -20,9 +20,9 @@ function aboutToExpire(
 }
 
 export async function getToken(
-  strapi: Strapi.Strapi
-): Promise<GetAttributesValues<"api::ig.ig"> | null> {
-  const entry: GetAttributesValues<"api::ig.ig">[] = await strapi.db
+  strapi: Strapi
+): Promise<Strapi.Schemas["api::ig.ig"]["attributes"] | null> {
+  const entry: Strapi.Schemas["api::ig.ig"]["attributes"][] = await strapi.db
     .query("api::ig.ig")
     .findMany({
       limit: 1,
@@ -36,7 +36,7 @@ export async function getToken(
   return null;
 }
 
-export async function fetchToken(strapi: Strapi.Strapi) {
+export async function fetchToken(strapi: Strapi) {
   const url = `${process.env.IG_API_URL}/refresh_access_token`;
 
   const stored = await getToken(strapi);
@@ -58,7 +58,7 @@ export async function fetchToken(strapi: Strapi.Strapi) {
   }
 }
 
-export async function createTokenEntry(strapi: Strapi.Strapi) {
+export async function createTokenEntry(strapi: Strapi) {
   const token = await fetchToken(strapi);
 
   await strapi.db.query("api::ig.ig").create({
@@ -83,7 +83,7 @@ export async function cleanupTokens(strapi) {
   }
 }
 
-export async function processTokensJob(strapi: Strapi.Strapi) {
+export async function processTokensJob(strapi: Strapi) {
   console.log("processTokensJob start");
   const token = await getToken(strapi);
 

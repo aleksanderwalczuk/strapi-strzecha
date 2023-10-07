@@ -15,6 +15,7 @@ export default ({ env }) => [
             "lh3.googleusercontent.com", // google avatars
             "platform-lookaside.fbsbx.com", // facebook avatars
             "dl.airtable.com", // strapi marketplace
+            "market-assets.strapi.io",
             `https://${env("AWS_BUCKET")}.s3.${env(
               "AWS_REGION"
             )}.amazonaws.com`,
@@ -27,6 +28,7 @@ export default ({ env }) => [
             "lh3.googleusercontent.com", // google avatars
             "platform-lookaside.fbsbx.com", // facebook avatars
             "dl.airtable.com", // strapi marketplace
+            "market-assets.strapi.io",
             `https://${env("AWS_BUCKET")}.s3.${env(
               "AWS_REGION"
             )}.amazonaws.com`,
