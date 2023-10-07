@@ -40,14 +40,16 @@ export default ({ env }) => [
     },
   },
   "strapi::poweredBy",
-  {
-    name: "strapi::cors",
-    config: {
-      enabled: true,
-      header: "*",
-      origin: [`${env("CORS_ORIGIN_1")}`, `${env("CORS_ORIGIN_2")}`],
-    },
-  },
+  env("STAGING", false)
+    ? "strapi::cors"
+    : {
+        name: "strapi::cors",
+        config: {
+          enabled: true,
+          header: "*",
+          origin: [`${env("CORS_ORIGIN_1")}`, `${env("CORS_ORIGIN_2")}`],
+        },
+      },
   "strapi::logger",
   "strapi::query",
   "strapi::body",
