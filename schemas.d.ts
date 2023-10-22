@@ -856,6 +856,7 @@ export interface ApiProductProduct extends CollectionTypeSchema {
       'api::currency.currency'
     >;
     providers: ComponentAttribute<'order-providers.order-provider', true>;
+    recommended: BooleanAttribute & DefaultTo<false>;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
