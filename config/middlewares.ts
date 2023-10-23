@@ -1,44 +1,55 @@
 export default ({ env }) => [
-  'strapi::errors',
+  "strapi::errors",
   {
-    name: 'strapi::security',
+    name: "strapi::security",
     config: {
       contentSecurityPolicy: {
         useDefaults: true,
         directives: {
-          'connect-src': ["'self'", 'https:'],
-          'img-src': [
+          "connect-src": ["'self'", "https:"],
+          "img-src": [
             "'self'",
-            'data:',
-            'blob:',
-            'res.cloudinary.com', // cloudinary images
-            'lh3.googleusercontent.com', // google avatars
-            'platform-lookaside.fbsbx.com', // facebook avatars
-            'dl.airtable.com', // strapi marketplace
-            `https://${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com`,
+            "data:",
+            "blob:",
+            "res.cloudinary.com", // cloudinary images
+            "lh3.googleusercontent.com", // google avatars
+            "platform-lookaside.fbsbx.com", // facebook avatars
+            "dl.airtable.com", // strapi marketplace
+            "market-assets.strapi.io",
+            `${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com`,
           ],
-          'media-src': [
+          "media-src": [
             "'self'",
-            'data:',
-            'blob:',
-            'res.cloudinary.com', // cloudinary images
-            'lh3.googleusercontent.com', // google avatars
-            'platform-lookaside.fbsbx.com', // facebook avatars
-            'dl.airtable.com', // strapi marketplace
-            `https://${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com`,
+            "data:",
+            "blob:",
+            "res.cloudinary.com", // cloudinary images
+            "lh3.googleusercontent.com", // google avatars
+            "platform-lookaside.fbsbx.com", // facebook avatars
+            "dl.airtable.com", // strapi marketplace
+            "market-assets.strapi.io",
+            `${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com`,
           ],
           upgradeInsecureRequests: null,
-          frameAncestors: ['self']
+          frameAncestors: ["self"],
         },
       },
     },
   },
-  'strapi::cors',
-  'strapi::poweredBy',
-  'strapi::logger',
-  'strapi::query',
-  'strapi::body',
-  'strapi::session',
-  'strapi::favicon',
-  'strapi::public',
+  "strapi::poweredBy",
+  env("STAGING", false)
+    ? "strapi::cors"
+    : {
+        name: "strapi::cors",
+        config: {
+          enabled: true,
+          header: "*",
+          origin: [`${env("CORS_ORIGIN_1")}`, `${env("CORS_ORIGIN_2")}`],
+        },
+      },
+  "strapi::logger",
+  "strapi::query",
+  "strapi::body",
+  "strapi::session",
+  "strapi::favicon",
+  "strapi::public",
 ];
