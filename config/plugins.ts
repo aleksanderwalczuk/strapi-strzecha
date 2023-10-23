@@ -8,6 +8,12 @@ export default ({ env }) => ({
   },
   upload: {
     config: {
+      breakpoints: {
+        xlarge: 1920,
+        large: 1000,
+        medium: 750,
+        small: 500,
+      },
       provider: "aws-s3",
       providerOptions: {
         accessKeyId: env("AWS_ACCESS_KEY_ID"),
