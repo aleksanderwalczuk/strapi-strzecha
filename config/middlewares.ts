@@ -42,8 +42,8 @@ export default ({ env }) => [
         name: "strapi::cors",
         config: {
           enabled: true,
-          header: "*",
-          origin: [`${env("CORS_ORIGIN_1")}`, `${env("CORS_ORIGIN_2")}`],
+          headers: ["Content-Type", "Authorization", "Origin", "Accept"],
+          origin: "*",
         },
       },
   "strapi::logger",
