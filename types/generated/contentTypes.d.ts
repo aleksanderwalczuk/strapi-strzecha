@@ -856,6 +856,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
     >;
     providers: Attribute.Component<'order-providers.order-provider', true>;
     recommended: Attribute.Boolean & Attribute.DefaultTo<false>;
+    seoMeta: Attribute.Component<'shared.seo'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
