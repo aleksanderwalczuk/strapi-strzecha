@@ -61,11 +61,15 @@ export async function fetchToken(strapi: Strapi) {
 export async function createTokenEntry(strapi: Strapi) {
   const token = await fetchToken(strapi);
 
-  await strapi.db.query("api::ig.ig").create({
-    data: {
-      ...token,
-    },
-  });
+  try {
+    await strapi.db.query("api::ig.ig").create({
+      data: {
+        ...token,
+      },
+    });
+  } catch (e) {
+    console.error("Failed to set ig token", e);
+  }
 }
 
 export async function cleanupTokens(strapi) {
