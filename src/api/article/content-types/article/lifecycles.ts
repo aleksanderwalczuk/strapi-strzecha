@@ -16,32 +16,41 @@ interface LifecycleEvent extends Event {
 
 export default {
   async afterCreate(event: LifecycleEvent) {
-    event;
-    const url = `${process.env.CONTENT_API_URL}/content`;
-    const { result, params } = event;
+    if (process.env.CONTENT_API_URL) {
+      const url = `${process.env.CONTENT_API_URL}/content`;
+      const { result, params } = event;
 
-    const res = await axios.post(
-      url,
-      JSON.stringify(omit(result, ["createdBy", "updatedBy"]))
-    );
+      const res = await axios.post(
+        url,
+        omit(result, ["createdBy", "updatedBy"])
+      );
+    }
   },
   async afterUpdate(event: LifecycleEvent) {
-    const url = `${process.env.CONTENT_API_URL}/content`;
-    const { result, params } = event;
+    if (process.env.CONTENT_API_URL) {
+      const url = `${process.env.CONTENT_API_URL}/content`;
+      const { result } = event;
 
-    if (event.result.publishedAt == null) {
+      if (event.result.publishedAt == null) {
+        return axios.delete(url, {
+          params: {
+            id: `${event.result.id}.${event.result.uid}`,
+          },
+        });
+      }
+
+      return axios.put(url, omit(result, ["createdBy", "updatedBy"]));
+    }
+  },
+  async afterDelete(event: LifecycleEvent) {
+    if (process.env.CONTENT_API_URL) {
+      const url = `${process.env.CONTENT_API_URL}/content`;
+
       return axios.delete(url, {
         params: {
-          id: result.uid,
+          id: `${event.result.id}.${event.result.uid}`,
         },
       });
     }
-
-    console.log("UPDATE");
-
-    return axios.put(
-      url,
-      JSON.stringify(omit(result, ["createdBy", "updatedBy"]))
-    );
   },
 };
